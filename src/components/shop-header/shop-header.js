@@ -1,15 +1,15 @@
 import React from 'react';
-import './shop-header.css';
+import classes from './shop-header.module.scss';
 import { Link } from 'react-router-dom';
 
 const ShopHeader = ({ numItems, total }) => {
   return (
-    <header className="shop-header row">
+    <header className={`row ${classes.shopHeader}`}>
       <Link to="/">
-        <div className="logo text-dark">Film Tracker</div>
+        <div className={`${classes.logo} text-dark`}>Film Tracker</div>
       </Link>
       <Link to="/cart">
-        <div className="shopping-cart">
+        <div className={`${classes.shoppingCart}`}>
           <i className="cart-icon fa fa-shopping-cart" />
           {numItems} items (${total})
         </div>

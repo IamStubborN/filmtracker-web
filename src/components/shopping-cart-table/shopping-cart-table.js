@@ -6,7 +6,7 @@ import {
   bookRemovedFromCart,
   allBooksRemovedFromCart } from '../../actions';
 
-import './shopping-cart-table.css';
+import classes from './shopping-cart-table.module.scss';
 
 const ShoppingCartTable = ({ items, total, onIncrease, onDecrease, onDelete }) => {
   const renderRow = (item, idx) => {

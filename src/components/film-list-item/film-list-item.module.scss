@@ -1,0 +1,18 @@
+.filmListItemContainer {
+  .title {
+    padding: 1rem;
+    height: 6rem;
+  }
+  img {
+    width: 25rem; /* You can set the dimensions to whatever you want */
+    height: 25rem;
+    object-fit: cover;
+  }
+  .genres {
+    height: 4rem;
+  }
+  .overview {
+    height: 8rem;
+    overflow: auto;
+  }
+}

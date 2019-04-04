@@ -9,7 +9,7 @@ const updateFilmList = (state, action) => {
   }
 
   switch (action.type) {
-    case 'FETCH_FILMS_BY_PAGE_REQUEST':
+    case 'FETCH_FILMS_BY_PAGE_REQUESTED':
       return {
         films: [],
         loading: true,

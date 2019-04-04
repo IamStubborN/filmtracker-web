@@ -1,7 +1,6 @@
-
 const filmsRequested = () => {
   return {
-    type: 'FETCH_FILMS_BY_PAGE_REQUEST'
+    type: 'FETCH_FILMS_BY_PAGE_REQUESTED'
   };
 };
 
@@ -40,6 +39,26 @@ export const allBooksRemovedFromCart = (bookId) => {
   };
 };
 
+const signInRequested = () => {
+  return {
+    type: 'SIGN_IN_REQUESTED'
+  };
+};
+
+const signInLoaded = (isSuccess) => {
+  return {
+    type: 'SIGN_IN_SUCCESS',
+    payload: isSuccess
+  };
+};
+
+const signInError = (error) => {
+  return {
+    type: 'SIGN_IN_FAILURE',
+    payload: error
+  };
+};
+
 const fetchBooksOld = (bookstoreService, dispatch) => () => {
   dispatch(filmsRequested());
   bookstoreService.getBooks()
@@ -54,6 +73,14 @@ const fetchFilms = (apiService) => (page) => (dispatch) => {
     .catch((err) => dispatch(filmsError(err)));
 };
 
+const signIn = (apiService) => (login, password) => (dispatch) => {
+  dispatch(signInRequested());
+  apiService.signIn(login, password)
+      .then((data) => dispatch(signInLoaded(data)))
+      .catch((err) => dispatch(signInError(err)));
+};
+
 export {
-  fetchFilms
+  fetchFilms,
+  signIn
 };

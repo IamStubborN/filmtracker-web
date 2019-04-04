@@ -5,26 +5,26 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { withApiService } from '../hoc';
-import { fetchFilms, bookAddedToCart } from '../../actions';
+import { fetchFilms, signIn, bookAddedToCart } from '../../actions';
 import { compose } from '../../utils';
 
 import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
 
-import './film-list.css';
+import classes from './film-list.module.scss';
 
 const FilmList = ({ films }) => {
   return (
-    <div className="films-container container">
-      <div className="row">
-      {
-        films.map((film) => {
-          console.log(film);
-          return (
-            <FilmListItem key={film.id} film={film}/>
-          );
-        })
-      }
+    <div className={`container`}>
+      <div className={`row`}>
+        {
+          films.map((film) => {
+            console.log(film);
+            return (
+              <FilmListItem key={film.id} film={film}/>
+            );
+          })
+        }
       </div>
     </div>
   );
@@ -32,7 +32,8 @@ const FilmList = ({ films }) => {
 
 class FilmListContainer extends Component {
   componentDidMount() {
-    this.props.fetchFilms(1);
+    this.props.signIn("login", "Password");
+    this.props.fetchFilms(2);
   }
 
   render() {
@@ -58,6 +59,7 @@ const mapDispatchToProps = (dispatch, { apiService }) => {
 
   return bindActionCreators({
     fetchFilms: fetchFilms(apiService),
+    signIn: signIn(apiService),
     onAddedToCart: bookAddedToCart
   }, dispatch);
 };

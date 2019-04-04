@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import ShopHeader from '../shop-header';
 import { HomePage, CartPage } from '../pages';
 
-import './app.css';
+import styles from './app.module.scss';
 
 const App = () => {
   return (
