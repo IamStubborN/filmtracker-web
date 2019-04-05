@@ -1,7 +1,7 @@
 import HomePage from './home-page';
-import CartPage from './cart-page';
+import FilmPage from './film-page';
 
 export {
   HomePage,
-  CartPage
+  FilmPage
 };

@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { withApiService } from '../hoc';
-import { fetchFilms, signIn, bookAddedToCart } from '../../actions';
+import {fetchFilms, signIn, bookAddedToCart, signUp, playTorrent} from '../../actions';
 import { compose } from '../../utils';
 
 import Spinner from '../spinner';
@@ -32,8 +32,7 @@ const FilmList = ({ films }) => {
 
 class FilmListContainer extends Component {
   componentDidMount() {
-    this.props.signIn("login", "Password");
-    this.props.fetchFilms(2);
+    this.props.fetchFilms(1);
   }
 
   render() {
@@ -60,7 +59,7 @@ const mapDispatchToProps = (dispatch, { apiService }) => {
   return bindActionCreators({
     fetchFilms: fetchFilms(apiService),
     signIn: signIn(apiService),
-    onAddedToCart: bookAddedToCart
+    signUp: signUp(apiService),
   }, dispatch);
 };
 

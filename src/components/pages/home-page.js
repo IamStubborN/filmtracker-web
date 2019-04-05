@@ -1,12 +1,13 @@
 import React from 'react';
 import FilmList from '../film-list';
-import ShoppingCartTable from '../shopping-cart-table/shopping-cart-table';
+import Paginator from "../paginator";
 
 const HomePage = () => {
   return (
-    <div>
+    <>
       <FilmList />
-    </div>
+      <Paginator/>
+    </>
   );
 };
 

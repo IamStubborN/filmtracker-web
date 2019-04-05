@@ -4,10 +4,10 @@ const filmsRequested = () => {
   };
 };
 
-const filmsLoaded = (newBooks) => {
+const filmsLoaded = (films) => {
   return {
     type: 'FETCH_FILMS_BY_PAGE_SUCCESS',
-    payload: newBooks
+    payload: films
   };
 };
 
@@ -18,24 +18,43 @@ const filmsError = (error) => {
   };
 };
 
-export const bookAddedToCart = (bookId) => {
+const filmByIDRequested = () => {
   return {
-    type: 'BOOK_ADDED_TO_CART',
-    payload: bookId
+    type: 'FETCH_FILM_BY_ID_REQUESTED'
   };
 };
 
-export const bookRemovedFromCart = (bookId) => {
+const filmByIDLoaded = (film) => {
   return {
-    type: 'BOOK_REMOVED_FROM_CART',
-    payload: bookId
+    type: 'FETCH_FILM_BY_ID_SUCCESS',
+    payload: film
   };
 };
 
-export const allBooksRemovedFromCart = (bookId) => {
+const filmByIDError = (error) => {
   return {
-    type: 'ALL_BOOKS_REMOVED_FROM_CART',
-    payload: bookId
+    type: 'FETCH_FILM_BY_ID_FAILURE',
+    payload: error
+  };
+};
+
+export const playTorrentRequested = () => {
+  return {
+    type: 'PLAY_TORRENT_REQUESTED',
+  };
+};
+
+export const playTorrentLoaded = (isStart) => {
+  return {
+      type: 'PLAY_TORRENT_LOADED',
+      payload: isStart
+  };
+};
+
+export const playTorrentError = (error) => {
+  return {
+    type: 'PLAY_TORRENT_FAILURE',
+    payload: error
   };
 };
 
@@ -59,11 +78,24 @@ const signInError = (error) => {
   };
 };
 
-const fetchBooksOld = (bookstoreService, dispatch) => () => {
-  dispatch(filmsRequested());
-  bookstoreService.getBooks()
-    .then((data) => dispatch(filmsLoaded(data)))
-    .catch((err) => dispatch(filmsError(err)));
+const signUpRequested = () => {
+  return {
+    type: 'SIGN_UP_REQUESTED'
+  };
+};
+
+const signUpLoaded = (isSuccess) => {
+  return {
+    type: 'SIGN_UP_SUCCESS',
+    payload: isSuccess
+  };
+};
+
+const signUpError = (error) => {
+  return {
+    type: 'SIGN_UP_FAILURE',
+    payload: error
+  };
 };
 
 const fetchFilms = (apiService) => (page) => (dispatch) => {
@@ -80,7 +112,28 @@ const signIn = (apiService) => (login, password) => (dispatch) => {
       .catch((err) => dispatch(signInError(err)));
 };
 
+const signUp = (apiService) => (login, password) => (dispatch) => {
+  dispatch(signUpRequested());
+  apiService.signUp(login, password)
+      .then((data) => dispatch(signUpLoaded(data)))
+      .catch((err) => dispatch(signUpError(err)));
+};
+
+const fetchFilmDetails = (apiService) => (id) => (dispatch) => {
+  dispatch(filmByIDRequested());
+  apiService.getFilmByID(id)
+      .then((data) => dispatch(filmByIDLoaded(data)))
+      .catch((err) => dispatch(filmByIDError(err)));
+};
+
+const playTorrent = (apiService) => (magnet) => (dispatch) => {
+    apiService.playTorrent(magnet)
+};
+
 export {
-  fetchFilms,
-  signIn
+    fetchFilms,
+    fetchFilmDetails,
+    signIn,
+    signUp,
+    playTorrent
 };

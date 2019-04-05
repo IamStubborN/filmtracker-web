@@ -1,26 +1,28 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import ShopHeader from '../shop-header';
-import { HomePage, CartPage } from '../pages';
+import AppHeader from '../app-header';
+import { HomePage, FilmPage } from '../pages';
+import classes from './app.module.scss';
 
-import styles from './app.module.scss';
+import Container from "react-bootstrap/Container";
+// fontawesome.library.add(faUser);
 
 const App = () => {
-  return (
-    <main role="main" className="container-fluid">
-      <ShopHeader numItems={5} total={210}/>
+    return (
+    <Container role="main">
+        <AppHeader numItems={5} total={210}/>
       <Switch>
         <Route
           path="/"
           component={HomePage}
           exact />
 
-        <Route
-          path="/cart"
-          component={CartPage}
-          />
+          <Route
+              path="/films/film/:id"
+              component={FilmPage}
+              />
       </Switch>
-    </main>
+    </Container>
   );
 };
 

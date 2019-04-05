@@ -1,3 +1,3 @@
-import BookList from './film-list';
+import FilmList from './film-list';
 
-export default BookList;
+export default FilmList;

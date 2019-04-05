@@ -16,7 +16,7 @@ ReactDOM.render(
     <ErrorBoundry>
       <ApiServiceProvider value={apiService}>
         <Router>
-          <App />
+            <App />
         </Router>
       </ApiServiceProvider>
     </ErrorBoundry>
