@@ -2,15 +2,15 @@ import React from 'react';
 import classes from './film-list-item.module.scss';
 import {Link} from "react-router-dom";
 
-const FilmListItem = ({ film, onAddedToCart }) => {
+const FilmListItem = ({ film}) => {
   const { id, name, overview, genres, release_date, poster_large_path } = film;
   return (
       <div className={`${classes.filmListItemContainer} col-sm-3 mb-4`}>
           <div className="card bg-light border-dark">
               <img className="card-img-top img-fluid" src={poster_large_path} alt="poster_large_path"/>
               <div className="card-block">
-                  <h4 className={`${classes.title} card-title pl-3`}>{name}</h4>
-                  <p className={`${classes.genres} card-text pl-3`}>
+                  <h5 className={`${classes.title} card-title pl-3`}>{name}</h5>
+                  <p className={`${classes.genres} card-text mt-4 pl-3`}>
                       {
                           genres.map((genre) => {
                               return <span className={`text-muted text-capitalize`}>{genre.russian_name} </span>

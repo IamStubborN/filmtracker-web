@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import AppHeader from '../app-header';
-import { HomePage, FilmPage } from '../pages';
+import { HomePage, FilmPage, TryPage } from '../pages';
 import classes from './app.module.scss';
 
 import Container from "react-bootstrap/Container";
@@ -21,6 +21,10 @@ const App = () => {
               path="/films/film/:id"
               component={FilmPage}
               />
+          <Route
+              path="/watch/:type/:name"
+              component={TryPage}
+          />
       </Switch>
     </Container>
   );

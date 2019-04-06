@@ -11,10 +11,17 @@ import Dropdown from "react-bootstrap/Dropdown";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import DropdownButton from "react-bootstrap/DropdownButton";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Popover from "react-bootstrap/Popover";
+import TryPage from "../pages/try-page";
+import Button from "react-bootstrap/Button";
+import {Link} from "react-router-dom";
 
 const FilmDetails = ({film, playTorrent }) => {
     const {name, original_name, overview, genres, release_date, poster_large_path, magnet_links } = film;
     const arr = Object.entries(magnet_links);
+    let searchName = name + " (" + release_date.split("-")[0] + ")";
+    console.log(searchName);
     return (
         <Row>
             <Col>
@@ -31,15 +38,22 @@ const FilmDetails = ({film, playTorrent }) => {
                 </p>
                 <p>{overview}</p>
                 <p className={`text-muted`}>Дата выхода: {release_date}</p>
-                <DropdownButton title="Смотреть онлайн">
+                <DropdownButton title="Скопировать magnet ссылку">
                     {
                         arr.map(item => {
-                        return <Dropdown.Item onClick={() => playTorrent(item[1])} as="button">{item[0]}</Dropdown.Item>
+                        return <Dropdown.Item onClick={() => {navigator.clipboard.writeText(item[1])}} as="button">{item[0]}</Dropdown.Item>
                     })
                     }
                 </DropdownButton>
-                <iframe src="https://embed.torrents-time.com/#source=magnet:?xt=urn:btih:8af6650014ec32d9bb5ffe4a0aca2d99f8dbcd94&dn=rutor.info&tr=udp://opentor.org:2710&tr=udp://opentor.org:2710&tr=http://retracker.local/announce&publisher_id=1"></iframe></Col>
+                <Link to={`/watch/trailer/${searchName}`}>
+                    <div className={"mt-3"}><Button>Смотреть Трейлер</Button></div>
+                </Link>
+                <Link to={`/watch/movie/${searchName}`}>
+                    <div className={"mt-3"}><Button>Смотреть Фильм</Button></div>
+                </Link>
+            </Col>
         </Row>
+
     );
 };
 
@@ -75,6 +89,8 @@ const mapDispatchToProps = (dispatch, { apiService }) => {
         playTorrent: playTorrent(apiService),
     }, dispatch);
 };
+
+
 
 export default compose(
     withApiService(),
