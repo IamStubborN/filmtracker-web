@@ -11,7 +11,7 @@ const Paginator = () => {
             <Pagination>
                 <Pagination.First />
                 <Pagination.Prev />
-                <Link to="/films/page/2">
+                <Link to="/films/page/1">
                     <Pagination.Item disabled>
                         {1}
                     </Pagination.Item>

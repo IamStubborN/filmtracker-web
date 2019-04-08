@@ -9,7 +9,7 @@ const logMiddleware = ({ getState }) => (next) => (action) => {
   return next(action);
 };
 
-const store = createStore(reducer, applyMiddleware(
-  thunkMiddleware, logMiddleware));
-
+const store = createStore(reducer,applyMiddleware(
+    thunkMiddleware, logMiddleware)
+);
 export default store;

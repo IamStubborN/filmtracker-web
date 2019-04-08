@@ -12,10 +12,15 @@ const App = () => {
     <Container role="main">
         <AppHeader numItems={5} total={210}/>
       <Switch>
-        <Route
-          path="/"
-          component={HomePage}
-          exact />
+        {/*<Route*/}
+          {/*path="/"*/}
+          {/*component={HomePage}*/}
+          {/*exact />*/}
+
+          <Route
+              path="/films/page/:id"
+              component={HomePage}
+              />
 
           <Route
               path="/films/film/:id"

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {bindActionCreators} from "redux";
-import { fetchFilmDetails, playTorrent } from "../../actions";
+import { fetchFilmDetails, playTorrent, searchTrailer } from "../../actions";
 import {compose} from "../../utils";
 import {withApiService} from "../hoc";
 import {connect} from "react-redux";
@@ -16,12 +16,13 @@ import Popover from "react-bootstrap/Popover";
 import TryPage from "../pages/try-page";
 import Button from "react-bootstrap/Button";
 import {Link} from "react-router-dom";
+import ReactDOM from "react-dom";
 
-const FilmDetails = ({film, playTorrent }) => {
+const FilmDetails = ({film, playTorrent, searchTrailer, trailerId }) => {
     const {name, original_name, overview, genres, release_date, poster_large_path, magnet_links } = film;
     const arr = Object.entries(magnet_links);
-    let searchName = name + " (" + release_date.split("-")[0] + ")";
-    console.log(searchName);
+    const searchName = name + " (" + release_date.split("-")[0] + ") трейлер";
+    console.log(trailerId);
     return (
         <Row>
             <Col>
@@ -45,15 +46,14 @@ const FilmDetails = ({film, playTorrent }) => {
                     })
                     }
                 </DropdownButton>
-                <Link to={`/watch/trailer/${searchName}`}>
-                    <div className={"mt-3"}><Button>Смотреть Трейлер</Button></div>
-                </Link>
-                <Link to={`/watch/movie/${searchName}`}>
-                    <div className={"mt-3"}><Button>Смотреть Фильм</Button></div>
-                </Link>
+                <Button onClick={() => searchTrailer(searchName)} className={"mt-3 d-block"}>Смотреть Трейлер</Button>
+                <Button onClick={() => playTorrent()}className={"mt-3 d-block"}>Смотреть Фильм</Button>
+                <div id={'player'}/>
+                <iframe width="560" height="315" src={`https://www.youtube.com/embed/${trailerId}`}  frameBorder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen></iframe>
             </Col>
         </Row>
-
     );
 };
 
@@ -64,7 +64,7 @@ class FilmDetailsContainer extends Component {
     }
 
     render() {
-        const { film, loading, error, playTorrent } = this.props;
+        const { film, loading, error, playTorrent, searchTrailer, trailerId } = this.props;
 
         if (loading) {
             return <Spinner />;
@@ -74,12 +74,12 @@ class FilmDetailsContainer extends Component {
             return <ErrorIndicator />;
         }
 
-        return <FilmDetails film={film} playTorrent={playTorrent}/>;
+        return <FilmDetails trailerId={trailerId} film={film} playTorrent={playTorrent} searchTrailer={searchTrailer}/>;
     }
 }
 
-const mapStateToProps = ({ film: { film, loading, error }}) => {
-    return { film: film, loading, error };
+const mapStateToProps = ({ film: { film, loading, error }, trailerId}) => {
+    return { film: film, loading, error, trailerId };
 };
 
 const mapDispatchToProps = (dispatch, { apiService }) => {
@@ -87,10 +87,9 @@ const mapDispatchToProps = (dispatch, { apiService }) => {
     return bindActionCreators({
         fetchFilmDetails: fetchFilmDetails(apiService),
         playTorrent: playTorrent(apiService),
+        searchTrailer: searchTrailer(apiService),
     }, dispatch);
 };
-
-
 
 export default compose(
     withApiService(),

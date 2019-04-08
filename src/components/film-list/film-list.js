@@ -14,56 +14,56 @@ import ErrorIndicator from '../error-indicator';
 import classes from './film-list.module.scss';
 
 const FilmList = ({ films }) => {
-  return (
-    <div className={`container`}>
-      <div className={`row`}>
-        {
-          films.map((film) => {
-            console.log(film);
-            return (
-              <FilmListItem key={film.id} film={film}/>
-            );
-          })
-        }
-      </div>
-    </div>
-  );
+    return (
+        <div className={`container`}>
+            <div className={`row`}>
+                {
+                    films.map((film) => {
+                        return (
+                            <FilmListItem key={film.id} film={film}/>
+                        );
+                    })
+                }
+            </div>
+        </div>
+    );
 };
 
 class FilmListContainer extends Component {
-  componentDidMount() {
-    this.props.fetchFilms(1);
-  }
-
-  render() {
-    const { films, loading, error, onAddedToCart } = this.props;
-
-    if (loading) {
-      return <Spinner />;
+    componentDidMount() {
+        const { page, fetchFilms } = this.props;
+        fetchFilms(page);
     }
 
-    if (error) {
-      return <ErrorIndicator />;
-    }
+    render() {
+        const { films, loading, error, onAddedToCart } = this.props;
 
-    return <FilmList films={films} onAddedToCart={onAddedToCart}/>;
-  }
+        if (loading) {
+            return <Spinner />;
+        }
+
+        if (error) {
+            return <ErrorIndicator />;
+        }
+
+        return <FilmList films={films} onAddedToCart={onAddedToCart}/>;
+    }
 }
 
-const mapStateToProps = ({ filmList: { films, loading, error }}) => {
-  return { films: films, loading, error };
+const mapStateToProps = ({ filmList: { films, page, loading, error }}) => {
+    return { films: films, page, loading, error };
 };
 
 const mapDispatchToProps = (dispatch, { apiService }) => {
 
-  return bindActionCreators({
-    fetchFilms: fetchFilms(apiService),
-    signIn: signIn(apiService),
-    signUp: signUp(apiService),
-  }, dispatch);
+    return bindActionCreators({
+        fetchFilms: fetchFilms(apiService),
+        signIn: signIn(apiService),
+        signUp: signUp(apiService),
+    }, dispatch);
 };
 
 export default compose(
-  withApiService(),
-  connect(mapStateToProps, mapDispatchToProps)
+    withApiService(),
+    connect(mapStateToProps, mapDispatchToProps)
 )(FilmListContainer);
