@@ -1,18 +1,8 @@
-import React, {Component} from 'react';
-import {withApiService} from "../hoc";
-import FilmList from '../film-list'
-import Paginator from "../paginator";
+import React from 'react';
+import Auth from "../auth";
 
-class MainPage extends Component {
-    render() {
-        return (
-            <>
-                <FilmList />
-                <Paginator />
-            </>
-        );
-    }
-}
+const MainPage = () => {
+    return <Auth/>;
+};
 
-export default
-    withApiService(MainPage);
+export default MainPage;

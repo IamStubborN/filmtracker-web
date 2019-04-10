@@ -1,9 +1,9 @@
-import MainPage from './main-page';
-// import FilmPage from './film-page';
-// import TryPage from './try-page'
+import FilmsPage from './films-page';
+import FilmPage from './film-page';
+import MainPage from './main-page'
 
 export {
-    MainPage,
-    // FilmPage,
-    // TryPage
+    FilmsPage,
+    FilmPage,
+    MainPage
 };

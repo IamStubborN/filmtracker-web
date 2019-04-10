@@ -1,38 +1,55 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Redirect, Route, Switch} from 'react-router-dom';
 import Header from '../header';
-import { MainPage } from '../pages';
+import { FilmsPage, FilmPage, MainPage } from '../pages';
 import classes from './app.module.scss';
 
 import { Container } from "reactstrap";
-import FilmPage from "../pages/film-page";
+import Cookies from "js-cookie";
+import ErrorIndicator from "../error-indicator";
+import PrivateRoute from "../private-route";
 
-const App = () => {
-    return (
-    <Container role="main">
-        <Header numItems={5} total={210}/>
-      <Switch>
-        <Route
-          path="/"
-          component={MainPage}
-          exact />
+class App extends Component {
 
-          <Route
-              path="/films/page/:id"
-              component={MainPage}
-              />
+    state = {
+        isLoggedIn: false
+    };
 
-          <Route
-              path="/films/film/:id"
-              component={FilmPage}
-              />
-          {/*<Route*/}
-              {/*path="/watch/:type/:name"*/}
-              {/*component={TryPage}*/}
-          {/*/>*/}
-      </Switch>
-    </Container>
-  );
-};
+    componentDidMount() {
+        const Token = Cookies.get("Token");
+        const Refresh = Cookies.get("Refresh");
+
+        if (Token && Refresh) {
+            this.setState({isLoggedIn:true})
+        }
+    }
+
+    render() {
+        const { isLoggedIn } = this.state;
+        return (
+            <Container role="main">
+                <Header/>
+                <Switch>
+                    <Route
+                        path="/"
+                        component={MainPage}
+                        exact />
+
+                    <PrivateRoute
+                        isLoggedIn={isLoggedIn}
+                        path="/films/page/:id"
+                        component={FilmsPage}
+                    />
+
+                    <PrivateRoute
+                        isLoggedIn={isLoggedIn}
+                        path="/films/film/:id"
+                        component={FilmPage}
+                    />
+                </Switch>
+            </Container>
+        );
+    }
+}
 
 export default App;

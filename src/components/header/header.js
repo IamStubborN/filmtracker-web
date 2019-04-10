@@ -1,19 +1,23 @@
 import React from 'react';
 import classes from './header.module.scss';
-import { Link } from 'react-router-dom';
-import * as fontawesome from "@fortawesome/fontawesome-svg-core";
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons/faShoppingCart";
+import {Link, withRouter} from 'react-router-dom';
 import { Row, Button } from "reactstrap"
+import Cookies from 'js-cookie';
 
-fontawesome.library.add(faShoppingCart);
+const Header = (props) => {
+    const onQuit = (e) => {
+        e.preventDefault();
+        Cookies.remove("Token");
+        Cookies.remove("Refresh");
+        props.history.push("/")
+    };
 
-const Header = ({ numItems, total }) => {
   return (
     <Row className={classes.shopHeader} as={'header'} >
       <Link to="/">
         <div className={`${classes.logo} text-dark`}>Film Tracker</div>
       </Link>
-        <Button >Войти</Button>
+        <Button onClick={onQuit}>Выйти</Button>
 
         {/*<Modal show={true}>*/}
             {/*<Modal.Header closeButton>*/}
@@ -33,4 +37,4 @@ const Header = ({ numItems, total }) => {
   );
 };
 
-export default Header;
+export default withRouter(Header);

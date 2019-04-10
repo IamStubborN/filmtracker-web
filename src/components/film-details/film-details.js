@@ -18,11 +18,8 @@ import classes from './film-details.module.scss'
 const FilmDetails = ({film,
                          isDropdownMagnetOpen,
                          isYoutubePlayerOpen,
-                         isTorrentPlayerOpen,
                          dropdownMagnetToggle,
-                         youtubePlayerToggle,
-                         torrentPlayerToggle,
-                         playTorrent}) => {
+                         youtubePlayerToggle}) => {
     const arr = Object.entries(film.magnet_links);
     return (
         <Row>
@@ -61,13 +58,6 @@ const FilmDetails = ({film,
                                 allowFullScreen/>
                     </ModalBody>
                 </Modal>
-                <Button onClick={() => torrentPlayerToggle()} className={"mt-3 d-block"}>Смотреть Фильм</Button>
-                <Modal size={"lg"} isOpen={isTorrentPlayerOpen} toggle={torrentPlayerToggle}>
-                    <ModalBody>
-                        {isTorrentPlayerOpen ?playTorrent(film.webtorrent_magnet,isTorrentPlayerOpen) : null}
-                        <video id={'player'}/>
-                    </ModalBody>
-                </Modal>
             </Col>
         </Row>
     );
@@ -81,7 +71,6 @@ class FilmDetailsContainer extends Component {
         error:false,
         isDropdownMagnetOpen: false,
         isYoutubePlayerOpen: false,
-        isTorrentPlayerOpen: false,
     };
 
     componentDidMount() {
@@ -102,14 +91,6 @@ class FilmDetailsContainer extends Component {
                 isYoutubePlayerOpen: !this.state.isYoutubePlayerOpen
             })
     };
-
-    torrentPlayerToggle = () => {
-        this.setState(
-            {...this.state,
-                isTorrentPlayerOpen: !this.state.isTorrentPlayerOpen
-            })
-    };
-
 
     fetchFilmDetails = (id) => {
         const { apiService } = this.props;
