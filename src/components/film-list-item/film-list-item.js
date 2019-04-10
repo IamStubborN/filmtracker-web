@@ -1,34 +1,43 @@
 import React from 'react';
 import classes from './film-list-item.module.scss';
 import {Link} from "react-router-dom";
+import Card from "reactstrap/es/Card";
+import CardBody from "reactstrap/es/CardBody";
+import CardImg from "reactstrap/es/CardImg";
+import CardTitle from "reactstrap/es/CardTitle";
+import CardText from "reactstrap/es/CardText";
+import CardLink from "reactstrap/es/CardLink";
+import Button from "reactstrap/es/Button";
+import CardGroup from "reactstrap/es/CardGroup";
+import CardFooter from "reactstrap/es/CardFooter";
+import CardDeck from "reactstrap/es/CardDeck";
 
-const FilmListItem = ({ film}) => {
-  const { id, name, overview, genres, release_date, poster_large_path } = film;
+const FilmListItem = ({ film }) => {
+  const { id, name, overview, genres, release_date, poster_path } = film;
   return (
-      <div className={`${classes.filmListItemContainer} col-sm-3 mb-4`}>
-          <div className="card bg-light border-dark">
-              <img className="card-img-top img-fluid" src={poster_large_path} alt="poster_large_path"/>
-              <div className="card-block">
-                  <h5 className={`${classes.title} card-title pl-3`}>{name}</h5>
-                  <p className={`${classes.genres} card-text mt-4 pl-3`}>
+      <CardGroup className={`${classes.filmListItemContainer} col-sm-4 mb-4`} >
+          <Card className="bg-light border-dark">
+              <CardImg className={"img-fluid"} top src={poster_path} alt="poster_path" />
+              <CardBody>
+                  <CardTitle className={`${classes.title} pl-2`}>{name}</CardTitle>
+                  <CardText className={`${classes.genres} mt-3 pl-2`}>
                       {
                           genres.map((genre) => {
-                              return <span className={`text-muted text-capitalize`}>{genre.russian_name} </span>
+                              return <span key={genre.id} className={`text-muted text-capitalize`}>{genre.russian_name} </span>
                           })
                       }
-                  </p>
-                  <p className={`${classes.overview} card-text pl-3`}>{overview}</p>
-                  <p className={`card-text pl-3`}>
+                  </CardText>
+                  <CardText className={`${classes.overview} mt-3 pl-2`}>{overview}</CardText>
+                  <CardText className={`pl-2`}>
                       <small className="text-muted">Дата выхода: {release_date}</small>
-                  </p>
-                  <Link to={`/films/film/${id}`}>
-                      <div className="btn btn-primary ml-3 mb-3">
-                          Подробнее
-                      </div>
-                  </Link>
-              </div>
-          </div>
-      </div>
+                  </CardText>
+
+              </CardBody>
+              <Link to={`/films/film/${id}`}>
+                  <Button  color="primary" block>Подробнее</Button>
+              </Link>
+          </Card>
+      </CardGroup>
   );
 };
 

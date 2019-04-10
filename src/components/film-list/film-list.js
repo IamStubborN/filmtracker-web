@@ -1,22 +1,17 @@
 import React, { Component } from 'react';
 import FilmListItem from '../film-list-item';
-
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-
 import { withApiService } from '../hoc';
-import {fetchFilms, signIn, bookAddedToCart, signUp, playTorrent} from '../../actions';
-import { compose } from '../../utils';
-
 import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
 
 import classes from './film-list.module.scss';
+import {Container, Row} from "reactstrap";
+import {withRouter} from "react-router-dom";
 
 const FilmList = ({ films }) => {
     return (
-        <div className={`container`}>
-            <div className={`row`}>
+        <Container>
+            <Row>
                 {
                     films.map((film) => {
                         return (
@@ -24,19 +19,46 @@ const FilmList = ({ films }) => {
                         );
                     })
                 }
-            </div>
-        </div>
+            </Row>
+        </Container>
     );
 };
 
 class FilmListContainer extends Component {
+    state = {
+        films: [],
+        loading: true,
+        error: false
+    };
     componentDidMount() {
-        const { page, fetchFilms } = this.props;
-        fetchFilms(page);
+        let { id } = this.props.match.params;
+        if (id === undefined) {
+            id = 1
+        }
+        this.fetchFilms(id)
     }
 
+    componentWillUpdate(nextProps) {
+        if (nextProps.match.params.id !== this.props.match.params.id) {
+            let { id } = nextProps.match.params;
+            if (id === undefined) {
+                id = 1
+            }
+            this.fetchFilms(id);
+        }
+    }
+
+    fetchFilms = (page) => {
+        const { apiService } = this.props;
+        apiService.getFilmsByPage(page)
+            .then(films => this.setState({
+                films,
+                loading:false
+            })).catch(() => this.setState({loading:false, error:true}))
+    };
+
     render() {
-        const { films, loading, error, onAddedToCart } = this.props;
+        const { films, loading, error } = this.state;
 
         if (loading) {
             return <Spinner />;
@@ -46,24 +68,8 @@ class FilmListContainer extends Component {
             return <ErrorIndicator />;
         }
 
-        return <FilmList films={films} onAddedToCart={onAddedToCart}/>;
+        return <FilmList films={films} />;
     }
 }
 
-const mapStateToProps = ({ filmList: { films, page, loading, error }}) => {
-    return { films: films, page, loading, error };
-};
-
-const mapDispatchToProps = (dispatch, { apiService }) => {
-
-    return bindActionCreators({
-        fetchFilms: fetchFilms(apiService),
-        signIn: signIn(apiService),
-        signUp: signUp(apiService),
-    }, dispatch);
-};
-
-export default compose(
-    withApiService(),
-    connect(mapStateToProps, mapDispatchToProps)
-)(FilmListContainer);
+export default withRouter(withApiService(FilmListContainer));

@@ -1,18 +1,13 @@
 import React from 'react';
-import classes from './app-header.module.scss';
+import classes from './header.module.scss';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as fontawesome from "@fortawesome/fontawesome-svg-core";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons/faShoppingCart";
-import Row from "react-bootstrap/Row";
-import Button from "react-bootstrap/Button";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import Modal from "react-bootstrap/Modal";
+import { Row, Button } from "reactstrap"
 
 fontawesome.library.add(faShoppingCart);
 
-const AppHeader = ({ numItems, total }) => {
+const Header = ({ numItems, total }) => {
   return (
     <Row className={classes.shopHeader} as={'header'} >
       <Link to="/">
@@ -38,4 +33,4 @@ const AppHeader = ({ numItems, total }) => {
   );
 };
 
-export default AppHeader;
+export default Header;

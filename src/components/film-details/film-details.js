@@ -1,70 +1,134 @@
 import React, { Component } from 'react';
-import {bindActionCreators} from "redux";
-import { fetchFilmDetails, playTorrent, searchTrailer } from "../../actions";
-import {compose} from "../../utils";
 import {withApiService} from "../hoc";
-import {connect} from "react-redux";
-import Spinner from "../film-list/film-list";
 import ErrorIndicator from "../error-indicator";
-import Jumbotron from "react-bootstrap/Jumbotron";
-import Dropdown from "react-bootstrap/Dropdown";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Popover from "react-bootstrap/Popover";
-import TryPage from "../pages/try-page";
-import Button from "react-bootstrap/Button";
-import {Link} from "react-router-dom";
-import ReactDOM from "react-dom";
+import {
+    Button,
+    Col,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
+    DropdownToggle,
+    Modal,
+    ModalBody,
+    Row
+} from "reactstrap";
+import Spinner from "../spinner";
+import classes from './film-details.module.scss'
 
-const FilmDetails = ({film, playTorrent, searchTrailer, trailerId }) => {
-    const {name, original_name, overview, genres, release_date, poster_large_path, magnet_links } = film;
-    const arr = Object.entries(magnet_links);
-    const searchName = name + " (" + release_date.split("-")[0] + ") трейлер";
-    console.log(trailerId);
+const FilmDetails = ({film,
+                         isDropdownMagnetOpen,
+                         isYoutubePlayerOpen,
+                         isTorrentPlayerOpen,
+                         dropdownMagnetToggle,
+                         youtubePlayerToggle,
+                         torrentPlayerToggle,
+                         playTorrent}) => {
+    const arr = Object.entries(film.magnet_links);
     return (
         <Row>
             <Col>
-                <img className="card-img-top img-fluid" src={poster_large_path} alt="poster_large_path"/>
+                <img className="card-img-top img-fluid" src={film.poster_path} alt="poster_large_path"/>
             </Col>
             <Col>
-                <h1>{name} / {original_name}</h1>
+                <h1>{film.name} / {film.original_name}</h1>
                 <p className={`text-muted text-capitalize`}>
                     {
-                        genres.map((genre) => {
+                        film.genres.map((genre) => {
                             return genre.russian_name + " "
                         })
                     }
                 </p>
-                <p>{overview}</p>
-                <p className={`text-muted`}>Дата выхода: {release_date}</p>
-                <DropdownButton title="Скопировать magnet ссылку">
-                    {
-                        arr.map(item => {
-                        return <Dropdown.Item onClick={() => {navigator.clipboard.writeText(item[1])}} as="button">{item[0]}</Dropdown.Item>
-                    })
-                    }
-                </DropdownButton>
-                <Button onClick={() => searchTrailer(searchName)} className={"mt-3 d-block"}>Смотреть Трейлер</Button>
-                <Button onClick={() => playTorrent()}className={"mt-3 d-block"}>Смотреть Фильм</Button>
-                <div id={'player'}/>
-                <iframe width="560" height="315" src={`https://www.youtube.com/embed/${trailerId}`}  frameBorder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen></iframe>
+                <p>{film.overview}</p>
+                <p className={`text-muted`}>Дата выхода: {film.release_date}</p>
+                <Dropdown direction="right" isOpen={isDropdownMagnetOpen} toggle={() => {dropdownMagnetToggle()}}>
+                    <DropdownToggle caret>
+                        Скопировать magnet ссылку
+                    </DropdownToggle>
+                    <DropdownMenu>
+                        {
+                            arr.map((item, idx) => {
+                                return <DropdownItem key={idx} onClick={() => {navigator.clipboard.writeText(item[1])}}>{item[0].split(")")[1]}</DropdownItem>
+                            })
+                        }
+                    </DropdownMenu>
+                </Dropdown>
+                <Button onClick={() => youtubePlayerToggle()} className={"mt-3 d-block"}>Смотреть Трейлер</Button>
+                <Modal size={"lg"} isOpen={isYoutubePlayerOpen} toggle={youtubePlayerToggle}>
+                    <ModalBody>
+                        <iframe className={"mt-3"} width={"100%"} height={"500"} src={`https://www.youtube.com/embed/${film.youtube_id}`}
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen/>
+                    </ModalBody>
+                </Modal>
+                <Button onClick={() => torrentPlayerToggle()} className={"mt-3 d-block"}>Смотреть Фильм</Button>
+                <Modal size={"lg"} isOpen={isTorrentPlayerOpen} toggle={torrentPlayerToggle}>
+                    <ModalBody>
+                        {isTorrentPlayerOpen ?playTorrent(film.webtorrent_magnet,isTorrentPlayerOpen) : null}
+                        <video id={'player'}/>
+                    </ModalBody>
+                </Modal>
             </Col>
         </Row>
     );
 };
 
 class FilmDetailsContainer extends Component {
+
+    state = {
+        film: {},
+        loading:true,
+        error:false,
+        isDropdownMagnetOpen: false,
+        isYoutubePlayerOpen: false,
+        isTorrentPlayerOpen: false,
+    };
+
     componentDidMount() {
-        const { id, fetchFilmDetails } = this.props;
-        fetchFilmDetails(id);
+        const { id } = this.props;
+        this.fetchFilmDetails(id);
     }
 
+    dropdownMagnetToggle = () => {
+        this.setState(
+            {...this.state,
+            isDropdownMagnetOpen: !this.state.isDropdownMagnetOpen
+            })
+    };
+
+    youtubePlayerToggle = () => {
+        this.setState(
+            {...this.state,
+                isYoutubePlayerOpen: !this.state.isYoutubePlayerOpen
+            })
+    };
+
+    torrentPlayerToggle = () => {
+        this.setState(
+            {...this.state,
+                isTorrentPlayerOpen: !this.state.isTorrentPlayerOpen
+            })
+    };
+
+
+    fetchFilmDetails = (id) => {
+        const { apiService } = this.props;
+        apiService.getFilmByID(id)
+            .then(film => {
+                this.setState({
+                    film,
+                    loading:false,
+                })
+            }).catch(() => this.setState({error:true}))
+    };
+
+    playTorrent = (magnet, isNeedToStop) => {
+        const { apiService } = this.props;
+        apiService.playTorrent(magnet, isNeedToStop)
+    };
+
     render() {
-        const { film, loading, error, playTorrent, searchTrailer, trailerId } = this.props;
+        const {loading, error} = this.state;
 
         if (loading) {
             return <Spinner />;
@@ -73,25 +137,18 @@ class FilmDetailsContainer extends Component {
         if (error) {
             return <ErrorIndicator />;
         }
-
-        return <FilmDetails trailerId={trailerId} film={film} playTorrent={playTorrent} searchTrailer={searchTrailer}/>;
+        // return <div></div>
+        return <FilmDetails
+            film={this.state.film}
+            isDropdownMagnetOpen={this.state.isDropdownMagnetOpen}
+            isYoutubePlayerOpen={this.state.isYoutubePlayerOpen}
+            isTorrentPlayerOpen={this.state.isTorrentPlayerOpen}
+            dropdownMagnetToggle={this.dropdownMagnetToggle}
+            youtubePlayerToggle={this.youtubePlayerToggle}
+            torrentPlayerToggle={this.torrentPlayerToggle}
+            playTorrent={this.playTorrent}
+        />;
     }
 }
 
-const mapStateToProps = ({ film: { film, loading, error }, trailerId}) => {
-    return { film: film, loading, error, trailerId };
-};
-
-const mapDispatchToProps = (dispatch, { apiService }) => {
-
-    return bindActionCreators({
-        fetchFilmDetails: fetchFilmDetails(apiService),
-        playTorrent: playTorrent(apiService),
-        searchTrailer: searchTrailer(apiService),
-    }, dispatch);
-};
-
-export default compose(
-    withApiService(),
-    connect(mapStateToProps, mapDispatchToProps)
-)(FilmDetailsContainer);
+export default withApiService(FilmDetailsContainer)

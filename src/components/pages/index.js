@@ -1,9 +1,9 @@
-import HomePage from './home-page';
-import FilmPage from './film-page';
-import TryPage from './try-page'
+import MainPage from './main-page';
+// import FilmPage from './film-page';
+// import TryPage from './try-page'
 
 export {
-    HomePage,
-    FilmPage,
-    TryPage
+    MainPage,
+    // FilmPage,
+    // TryPage
 };
