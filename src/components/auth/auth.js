@@ -43,28 +43,30 @@ class Auth extends Component {
 
     onSubmit = (e) => {
         e.preventDefault();
+        const { login, password, checkbox } = this.state;
+        const { apiService, history, onLogIn} = this.props;
         const isValid = this.validate();
         if (isValid) {
-            if (this.state.checkbox) {
-                this.props.apiService.signUp(
-                    this.state.login,
-                    this.state.password
+            if (checkbox) {
+                apiService.signUp(
+                    login,
+                    password
                 ).then(data => {
                     if (data.success) {
-                        this.props.onLogIn();
-                        this.props.history.push('/films/page/1')
+                        onLogIn(login);
+                        history.push('/films/page/1')
                     } else if (data.error) {
                         this.setState({error: data.error})
                     }
                 })
             } else {
-                this.props.apiService.signIn(
-                    this.state.login,
-                    this.state.password
+                apiService.signIn(
+                    login,
+                    password
                 ).then(data => {
                     if (data.success) {
-                        this.props.onLogIn();
-                        this.props.history.push('/films/page/1')
+                        onLogIn(this.state.login);
+                        history.push('/films/page/1')
                     } else if (data.error) {
                         this.setState({error: data.error})
                     }
@@ -121,7 +123,7 @@ class Auth extends Component {
                                onChange={this.handleChange}/>
                         Новый пользователь
                     </Col>
-                    <Button onClick={this.onSubmit} className={"mt-2 ml-3"}>Войти</Button>
+                    <Button color={"primary"} onClick={this.onSubmit} className={"mt-2 ml-3"}>Войти</Button>
                 </Form>
             </Container>
         );

@@ -3,10 +3,9 @@ import FilmListItem from '../film-list-item';
 import { withApiService } from '../hoc';
 import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
-
-import classes from './film-list.module.scss';
 import {Row} from "reactstrap";
 import {withRouter} from "react-router-dom";
+import Search from "../search/search";
 
 const FilmList = ({ films, loading, error }) => {
     const spinner = loading ? <Spinner /> : null;
@@ -31,7 +30,8 @@ class FilmListContainer extends Component {
     state = {
         films: [],
         loading: true,
-        error: false
+        error: false,
+        searchName: "",
     };
     componentDidMount() {
         let { id } = this.props.match.params;
@@ -60,10 +60,22 @@ class FilmListContainer extends Component {
             })).catch(() => this.setState({loading:false, error:true}))
     };
 
+    onChangeHandler = (e) => {
+        this.setState({searchName:e.target.value})
+    };
+
+    onSearch = () => {
+        this.props.apiService.searchByName(this.state.searchName)
+            .then(data => this.setState({films:data}))
+    };
+
     render() {
         const { films, loading, error } = this.state;
-
-        return <FilmList films={films} loading={loading} error={error} />;
+        return (
+            <>
+            <Search searchName={this.state.searchName} onChangeHandler={this.onChangeHandler} onSearch={this.onSearch}/>
+                {films !== null && films.length > 0 ? <FilmList films={films} loading={loading} error={error}/> : null}
+            </>);
     }
 }
 

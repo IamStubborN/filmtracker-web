@@ -1,4 +1,3 @@
-import WebTorrent from 'webtorrent'
 export default class ApiService {
 
   // Api v1 functions

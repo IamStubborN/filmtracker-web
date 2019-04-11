@@ -20,7 +20,7 @@ const PageNotFound = () => {
                                 </h3>
                                 <p>Такой страницы нету!</p>
                                 <Link to={"/films/page/1"}>
-                                      <Button outline size={"lg"} color={"success"}> ИДУ ДАМОЙ</Button>
+                                      <Button outline size={"lg"} color={"success"}> ИДУ ДОМОЙ</Button>
                                 </Link>
                             </div>
                         </div>

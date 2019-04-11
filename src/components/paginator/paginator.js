@@ -19,7 +19,6 @@ class Paginator extends Component {
         }
         this.setPageCount();
         this.setCurrentPage(id);
-
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -29,7 +28,6 @@ class Paginator extends Component {
                 id = 1
             }
             this.setCurrentPage(id);
-            console.log(nextState.currentPage , nextState.pageCount)
             if (nextState.currentPage > nextState.pageCount) {
                 this.props.history.push(`/found404`)
             }
@@ -51,7 +49,7 @@ class Paginator extends Component {
         const { currentPage, pageCount } = this.state;
         const isCurrent0 = currentPage == 1 ? 1 : currentPage - 1;
         const isCurrent1 = currentPage >= pageCount ? pageCount : +currentPage + 1;
-        const isCurrent2 = currentPage + 1>= pageCount ? pageCount : +currentPage + 1;
+        const isCurrent2 = currentPage + 1 >= pageCount ? pageCount : +currentPage + 1;
          return (
             <Row className={classes.pag}>
                 <Pagination>

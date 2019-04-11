@@ -13,41 +13,20 @@ library.add(faSearch);
 
 class Search extends Component {
 
-    state = {
-        value: ""
-    };
-
-    onChangeHandler = (e) => {
-        this.setState({value:e.target.value})
-    };
-
-    onSearch = (e) => {
-        const { value } = this.state;
-        if (e.target.name === "search") {
-            if (e.keyCode === 13) {
-                this.props.apiService.searchByName(value)
-                    .then(data => console.log(data))
-            }
-        }else {
-            this.props.apiService.searchByName(value)
-                .then(data => console.log(data))
-        }
-    };
-
     render() {
         return (
-            <Col sm={5} className={`${classes.search} d-flex`}>
+            <Col className={`${classes.search} mb-3`}>
                 <Input
                     name={"search"}
                     className={classes.input}
                     autoFocus
-                    value={this.state.value}
-                    onChange={this.onChangeHandler}
+                    value={this.props.searchName}
+                    onChange={this.props.onChangeHandler}
                 placeholder={"Что искать?"}
-                    onKeyUp={this.onSearch}
+                    onKeyUp={this.props.onSearch}
                 >
                 </Input>
-                <Button onClick={this.onSearch} className={"ml-3"} color={"primary"} outline>
+                <Button onClick={this.props.onSearch} className={"ml-3"} color={"primary"} outline>
                     <FontAwesomeIcon className={classes.icon} icon="search" />
                 </Button>
             </Col>
