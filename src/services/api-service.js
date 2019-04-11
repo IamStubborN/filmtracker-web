@@ -1,9 +1,11 @@
 export default class ApiService {
 
+    baseUrl = "http://filmtracker-api.com:5555";
+
   // Api v1 functions
 
     searchByName = (name) => {
-        return fetch(`http://localhost:5555/api/v1/films/filter?name=${name}`,
+        return fetch(`${this.baseUrl}/api/v1/films/filter?name=${name}`,
             {
                 headers: {
                     'Accept': 'application/json',
@@ -16,7 +18,7 @@ export default class ApiService {
     };
 
   getApiOverview = () => {
-    return fetch('http://localhost:5555/api/v1/',
+    return fetch(`${this.baseUrl}/api/v1/`,
         {
           headers: {
             'Accept': 'application/json',
@@ -30,7 +32,7 @@ export default class ApiService {
   };
 
   getFilmsByPage = (page) => {
-    return fetch('http://localhost:5555/api/v1/films/page/' + page,
+    return fetch(`${this.baseUrl}/api/v1/films/page/${page}`,
         {
           headers: {
             'Accept': 'application/json',
@@ -44,7 +46,7 @@ export default class ApiService {
   };
 
     getFilmByID = (ID) => {
-        return fetch('http://localhost:5555/api/v1/films/film/' + ID,
+        return fetch(`${this.baseUrl}/api/v1/films/film/${ID}`,
             {
                 headers: {
                     'Accept': 'application/json',
@@ -61,7 +63,7 @@ export default class ApiService {
   // Auth functions
 
   signIn = (login, password) => {
-    return fetch('http://localhost:5555/users/auth/signin/',
+    return fetch(`${this.baseUrl}/users/auth/signin/`,
         {
           headers: {
             'Accept': 'application/json',
@@ -79,7 +81,7 @@ export default class ApiService {
   };
 
   signUp = (login, password) => {
-    return fetch('http://localhost:5555/users/auth/signup/',
+    return fetch(`${this.baseUrl}/users/auth/signup/`,
         {
           headers: {
             'Accept': 'application/json',
