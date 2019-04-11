@@ -1,14 +1,12 @@
-FROM node:alpine as builder
-WORKDIR '/app'
-COPY package*.json ./
+FROM tiangolo/node-frontend:latest as build-stage
+WORKDIR /app
+COPY package*.json /app/
 RUN yarn install
-COPY . .
+COPY ./ /app/
 RUN yarn build
 
-FROM nginx
-RUN rm -v /etc/nginx/nginx.conf
-COPY nginx.conf /etc/nginx/nginx.conf
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+FROM nginx:latest
+COPY --from=build-stage /app/build/ /usr/share/nginx/html
+COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
-COPY --from=builder /app/build /usr/share/nginx/html
 CMD service nginx start
