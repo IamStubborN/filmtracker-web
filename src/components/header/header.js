@@ -3,36 +3,17 @@ import classes from './header.module.scss';
 import {Link, withRouter} from 'react-router-dom';
 import { Row, Button } from "reactstrap"
 import Cookies from 'js-cookie';
+import Search from "../search/search";
 
 const Header = (props) => {
-    const onQuit = (e) => {
-        e.preventDefault();
-        Cookies.remove("Token");
-        Cookies.remove("Refresh");
-        props.history.push("/")
-    };
 
   return (
     <Row className={classes.shopHeader} as={'header'} >
-      <Link to="/">
+      <Link to="/films/page/1">
         <div className={`${classes.logo} text-dark`}>Film Tracker</div>
       </Link>
-        <Button onClick={onQuit}>Выйти</Button>
-
-        {/*<Modal show={true}>*/}
-            {/*<Modal.Header closeButton>*/}
-                {/*<Modal.Title>Modal heading</Modal.Title>*/}
-            {/*</Modal.Header>*/}
-            {/*<Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>*/}
-            {/*<Modal.Footer>*/}
-                {/*<Button variant="secondary">*/}
-                    {/*Close*/}
-                {/*</Button>*/}
-                {/*<Button variant="primary" >*/}
-                    {/*Save Changes*/}
-                {/*</Button>*/}
-            {/*</Modal.Footer>*/}
-        {/*</Modal>*/}
+        <Search/>
+        {props.isLoggedIn ? <Button color={"danger"} onClick={props.onQuit}>Выйти</Button> : null}
     </Row>
   );
 };

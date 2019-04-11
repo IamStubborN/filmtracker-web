@@ -2,26 +2,30 @@ import React, { Component } from 'react';
 import {
     Container, Col, Form,
     FormGroup, Label, Input,
-    Button,
+    Button, UncontrolledAlert,
 } from 'reactstrap';
 import { withApiService } from '../hoc';
 import {withRouter} from "react-router-dom";
 import Cookies from 'js-cookie';
+import Alert from "reactstrap/es/Alert";
 
 
 class Auth extends Component {
-
     state = {
         login: "",
         password: "",
-        checkbox: false
+        checkbox: false,
+        error: ""
     };
 
     componentDidMount() {
-        const Token = Cookies.get("Token");
-        const Refresh = Cookies.get("Refresh");
-        if (Token && Refresh) {
+        if (this.props.isLoggedIn) {
             this.props.history.push('/films/page/1')
+        }
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.error !== this.state.error) {
+            this.setState({error: this.state.error})
         }
     }
 
@@ -41,30 +45,33 @@ class Auth extends Component {
         e.preventDefault();
         const isValid = this.validate();
         if (isValid) {
-            console.log(this.state.checkbox);
             if (this.state.checkbox) {
                 this.props.apiService.signUp(
                     this.state.login,
                     this.state.password
                 ).then(data => {
                     if (data.success) {
+                        this.props.onLogIn();
                         this.props.history.push('/films/page/1')
                     } else if (data.error) {
-                        alert(data.error)
+                        this.setState({error: data.error})
                     }
-                }).catch(alert)
+                })
             } else {
                 this.props.apiService.signIn(
                     this.state.login,
                     this.state.password
                 ).then(data => {
                     if (data.success) {
+                        this.props.onLogIn();
                         this.props.history.push('/films/page/1')
                     } else if (data.error) {
-                        alert(data.error)
+                        this.setState({error: data.error})
                     }
-                }).catch(alert)
+                })
             }
+        } else {
+            this.setState({error:"Login or Password not valid, need at least 8 symbols."})
         }
     };
 
@@ -77,16 +84,19 @@ class Auth extends Component {
     render() {
         return (
             <Container className="pl-5 pr-5">
-                <h2>Sign In</h2>
+                {this.state.error ? <Alert color="danger">
+                    {this.state.error}
+                </Alert> : null}
+                <h2>Вход</h2>
                 <Form className="form">
                     <Col>
                         <FormGroup>
-                            <Label>Login</Label>
                             <Input
                                 type="text"
                                 name="text"
                                 id="login"
-                                placeholder="Your Login"
+                                autoFocus
+                                placeholder="Ваш логин"
                                 value={this.state.email}
                                 onChange={this.handleChange}
                             />
@@ -94,12 +104,11 @@ class Auth extends Component {
                     </Col>
                     <Col>
                         <FormGroup>
-                            <Label>Password</Label>
                             <Input
                                 type="password"
                                 name="password"
                                 id="password"
-                                placeholder="Your password"
+                                placeholder="Ваш пароль"
                                 value={this.state.password}
                                 onChange={this.handleChange}
                             />

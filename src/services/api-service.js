@@ -1,24 +1,20 @@
 import WebTorrent from 'webtorrent'
 export default class ApiService {
 
-    count = 0;
+  // Api v1 functions
 
-    // YouTube
-
-    searchTrailer = (name) => {
-        return fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${name}&maxResults=1&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+    searchByName = (name) => {
+        return fetch(`http://localhost:5555/api/v1/films/filter?name=${name}`,
             {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
+                credentials: "include",
                 method: 'GET',
             })
             .then(res => res.json())
-            .then(data => data.items[0].id.videoId);
     };
-
-  // Api v1 functions
 
   getApiOverview = () => {
     return fetch('http://localhost:5555/api/v1/',

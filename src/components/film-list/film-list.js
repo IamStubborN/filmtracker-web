@@ -5,22 +5,25 @@ import Spinner from '../spinner';
 import ErrorIndicator from '../error-indicator';
 
 import classes from './film-list.module.scss';
-import {Container, Row} from "reactstrap";
+import {Row} from "reactstrap";
 import {withRouter} from "react-router-dom";
 
-const FilmList = ({ films }) => {
+const FilmList = ({ films, loading, error }) => {
+    const spinner = loading ? <Spinner /> : null;
+    const err = error ? <ErrorIndicator /> : null;
+
     return (
-        <Container>
             <Row>
-                {
-                    films.map((film) => {
+                {spinner}
+                {err}
+                {spinner ? null
+                    : films.map((film) => {
                         return (
                             <FilmListItem key={film.id} film={film}/>
                         );
                     })
                 }
             </Row>
-        </Container>
     );
 };
 
@@ -60,15 +63,7 @@ class FilmListContainer extends Component {
     render() {
         const { films, loading, error } = this.state;
 
-        if (loading) {
-            return <Spinner />;
-        }
-
-        if (error) {
-            return <ErrorIndicator />;
-        }
-
-        return <FilmList films={films} />;
+        return <FilmList films={films} loading={loading} error={error} />;
     }
 }
 

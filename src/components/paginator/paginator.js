@@ -19,15 +19,20 @@ class Paginator extends Component {
         }
         this.setPageCount();
         this.setCurrentPage(id);
+
     }
 
-    componentWillUpdate(nextProps) {
+    componentWillUpdate(nextProps, nextState) {
         if (nextProps.match.params.id !== this.props.match.params.id) {
             let { id } = nextProps.match.params;
             if (id === undefined) {
                 id = 1
             }
             this.setCurrentPage(id);
+            console.log(nextState.currentPage , nextState.pageCount)
+            if (nextState.currentPage > nextState.pageCount) {
+                this.props.history.push(`/found404`)
+            }
         }
     }
     setPageCount = () => {
@@ -45,6 +50,8 @@ class Paginator extends Component {
     render() {
         const { currentPage, pageCount } = this.state;
         const isCurrent0 = currentPage == 1 ? 1 : currentPage - 1;
+        const isCurrent1 = currentPage >= pageCount ? pageCount : +currentPage + 1;
+        const isCurrent2 = currentPage + 1>= pageCount ? pageCount : +currentPage + 1;
          return (
             <Row className={classes.pag}>
                 <Pagination>
@@ -64,17 +71,17 @@ class Paginator extends Component {
                         </Link>
                     </PaginationItem>
                     <PaginationItem>
-                        <Link to={`/films/page/${+currentPage+1}`}>
-                            <PaginationLink>{+currentPage+1}</PaginationLink>
+                        <Link to={`/films/page/${isCurrent1}`}>
+                            <PaginationLink>{isCurrent1 >= pageCount ? +currentPage + 1 : isCurrent1}</PaginationLink>
                         </Link>
                     </PaginationItem>
                     <PaginationItem>
-                        <Link to={`/films/page/${+currentPage+2}`}>
-                            <PaginationLink>{+currentPage+2}</PaginationLink>
+                        <Link to={`/films/page/${isCurrent2}`}>
+                            <PaginationLink>{isCurrent2 >= pageCount ? +currentPage + 2 : isCurrent2}</PaginationLink>
                         </Link>
                     </PaginationItem>
                     <PaginationItem>
-                        <Link to={`/films/page/${+currentPage+1}`}>
+                        <Link to={`/films/page/${+isCurrent1}`}>
                             <PaginationLink next/>
                         </Link>
                     </PaginationItem>

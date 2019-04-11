@@ -22,7 +22,7 @@ const FilmDetails = ({film,
                          youtubePlayerToggle}) => {
     const arr = Object.entries(film.magnet_links);
     return (
-        <Row>
+            <>
             <Col>
                 <img className="card-img-top img-fluid" src={film.poster_path} alt="poster_large_path"/>
             </Col>
@@ -59,8 +59,8 @@ const FilmDetails = ({film,
                     </ModalBody>
                 </Modal>
             </Col>
-        </Row>
-    );
+        </>
+    )
 };
 
 class FilmDetailsContainer extends Component {
@@ -110,25 +110,22 @@ class FilmDetailsContainer extends Component {
 
     render() {
         const {loading, error} = this.state;
-
-        if (loading) {
-            return <Spinner />;
-        }
-
-        if (error) {
-            return <ErrorIndicator />;
-        }
-        // return <div></div>
-        return <FilmDetails
+        const spinner = loading ? <Spinner /> : null;
+        const err = error ? <ErrorIndicator /> : null;
+        return(
+        <Row>
+            {spinner}
+            {err}
+            {spinner ? null
+                :
+            <FilmDetails
             film={this.state.film}
             isDropdownMagnetOpen={this.state.isDropdownMagnetOpen}
             isYoutubePlayerOpen={this.state.isYoutubePlayerOpen}
-            isTorrentPlayerOpen={this.state.isTorrentPlayerOpen}
             dropdownMagnetToggle={this.dropdownMagnetToggle}
             youtubePlayerToggle={this.youtubePlayerToggle}
-            torrentPlayerToggle={this.torrentPlayerToggle}
-            playTorrent={this.playTorrent}
-        />;
+        />};
+        </Row>)
     }
 }
 

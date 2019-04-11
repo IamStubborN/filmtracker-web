@@ -9,6 +9,12 @@
     font-family: "Playfair Display", Georgia, serif;
     font-size: 2.5rem;
     padding-left: 1rem;
+    text-underline: none;
+    a {
+      text-outline: none;
+      text-underline: none;
+
+    }
   }
 
   .shoppingCart {
