@@ -8,8 +8,8 @@ import {withApiService} from "../hoc";
 class Paginator extends Component {
 
     state = {
-        count: 0,
-        page: 1
+        currentPage: 0,
+        pageCount: 1
     };
 
     componentDidMount() {
@@ -28,7 +28,7 @@ class Paginator extends Component {
                 id = 1
             }
             this.setCurrentPage(id);
-            if (nextState.page > nextState.count) {
+            if (nextState.currentPage > nextState.pageCount) {
                 this.props.history.push(`/found404`)
             }
         }
@@ -37,21 +37,22 @@ class Paginator extends Component {
         const { getApiOverview } = this.props.apiService;
         getApiOverview()
             .then(data => {
-                this.setState({count: Math.ceil(data.FilmsCount / 9)});
+                this.setState({pageCount: Math.ceil(data.FilmsCount / 9)});
             })
     };
 
     setCurrentPage = (id) => {
-        this.setState({page: id})
+        this.setState({currentPage: id})
     };
 
     render() {
         const { currentPage, pageCount } = this.state;
+        console.log(currentPage, pageCount);
         const page = parseInt(currentPage);
         const count = parseInt(pageCount);
         const isCurrent0 = page == 1 ? 1 : page - 1;
         const isCurrent1 = page >= count ? count : page + 1;
-        const isCurrent2 = page + 1 >= count ? count : page + 1;
+        const isCurrent2 = page + 1 >= count ? count : page + 2;
          return (
             <Row className={classes.pag}>
                 <Pagination>
