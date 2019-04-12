@@ -8,8 +8,8 @@ import {withApiService} from "../hoc";
 class Paginator extends Component {
 
     state = {
-        pageCount: 0,
-        currentPage: 1
+        count: 0,
+        page: 1
     };
 
     componentDidMount() {
@@ -28,7 +28,7 @@ class Paginator extends Component {
                 id = 1
             }
             this.setCurrentPage(id);
-            if (nextState.currentPage > nextState.pageCount) {
+            if (nextState.page > nextState.count) {
                 this.props.history.push(`/found404`)
             }
         }
@@ -37,19 +37,21 @@ class Paginator extends Component {
         const { getApiOverview } = this.props.apiService;
         getApiOverview()
             .then(data => {
-                this.setState({pageCount: Math.ceil(data.FilmsCount / 9)});
+                this.setState({count: Math.ceil(data.FilmsCount / 9)});
             })
     };
 
     setCurrentPage = (id) => {
-        this.setState({currentPage: id})
+        this.setState({page: id})
     };
 
     render() {
         const { currentPage, pageCount } = this.state;
-        const isCurrent0 = currentPage == 1 ? 1 : currentPage - 1;
-        const isCurrent1 = currentPage >= pageCount ? pageCount : +currentPage + 1;
-        const isCurrent2 = currentPage + 1 >= pageCount ? pageCount : +currentPage + 1;
+        const page = parseInt(currentPage);
+        const count = parseInt(pageCount);
+        const isCurrent0 = page == 1 ? 1 : page - 1;
+        const isCurrent1 = page >= count ? count : page + 1;
+        const isCurrent2 = page + 1 >= count ? count : page + 1;
          return (
             <Row className={classes.pag}>
                 <Pagination>
@@ -64,18 +66,18 @@ class Paginator extends Component {
                         </Link>
                     </PaginationItem>
                     <PaginationItem active>
-                        <Link to={`/films/page/${+currentPage}`}>
-                            <PaginationLink>{+currentPage}</PaginationLink>
+                        <Link to={`/films/page/${page}`}>
+                            <PaginationLink>{page}</PaginationLink>
                         </Link>
                     </PaginationItem>
                     <PaginationItem>
                         <Link to={`/films/page/${isCurrent1}`}>
-                            <PaginationLink>{isCurrent1 >= pageCount ? +currentPage + 1 : isCurrent1}</PaginationLink>
+                            <PaginationLink>{isCurrent1 >= count ? (page + 1) : isCurrent1}</PaginationLink>
                         </Link>
                     </PaginationItem>
                     <PaginationItem>
                         <Link to={`/films/page/${isCurrent2}`}>
-                            <PaginationLink>{isCurrent2 >= pageCount ? +currentPage + 2 : isCurrent2}</PaginationLink>
+                            <PaginationLink>{isCurrent2 >= count ? (page + 2) : isCurrent2}</PaginationLink>
                         </Link>
                     </PaginationItem>
                     <PaginationItem>
@@ -84,7 +86,7 @@ class Paginator extends Component {
                         </Link>
                     </PaginationItem>
                     <PaginationItem>
-                        <Link to={`/films/page/${pageCount}`}>
+                        <Link to={`/films/page/${count}`}>
                             <PaginationLink last/>
                         </Link>
                     </PaginationItem>
