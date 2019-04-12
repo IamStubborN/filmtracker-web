@@ -47,7 +47,6 @@ class Paginator extends Component {
 
     render() {
         const { currentPage, pageCount } = this.state;
-        console.log(currentPage, pageCount);
         const page = parseInt(currentPage);
         const count = parseInt(pageCount);
         const isCurrent0 = page == 1 ? 1 : page - 1;
