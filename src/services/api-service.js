@@ -1,6 +1,6 @@
 export default class ApiService {
 
-    baseUrl = "http://localhost:5555";
+    baseUrl = "http://filmtracker-api.com:5555";
 
   // Api v1 functions
 
