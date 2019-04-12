@@ -37,14 +37,14 @@ const FilmDetails = ({film,
                 </p>
                 <p>{film.overview}</p>
                 <p className={`text-muted`}>Дата выхода: {film.release_date}</p>
-                <Dropdown direction="right" isOpen={isDropdownMagnetOpen} toggle={() => {dropdownMagnetToggle()}}>
+                <Dropdown direction="up" isOpen={isDropdownMagnetOpen} toggle={() => {dropdownMagnetToggle()}}>
                     <DropdownToggle caret>
-                        Скопировать magnet ссылку
+                        Открыть magnet-ссылку
                     </DropdownToggle>
                     <DropdownMenu>
                         {
                             arr.map((item, idx) => {
-                                return <DropdownItem key={idx} onClick={() => {navigator.clipboard.writeText(item[1])}}>{item[0].split(")")[1]}</DropdownItem>
+                                return <DropdownItem key={idx} href={item[1]}>{item[0].split(")")[1]}</DropdownItem>
                             })
                         }
                     </DropdownMenu>
