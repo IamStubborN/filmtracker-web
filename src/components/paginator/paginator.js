@@ -37,7 +37,7 @@ class Paginator extends Component {
         const { getApiOverview } = this.props.apiService;
         getApiOverview()
             .then(data => {
-                this.setState({pageCount: Math.round(data.FilmsCount / 9)});
+                this.setState({pageCount: Math.ceil(data.FilmsCount / 9)});
             })
     };
 
