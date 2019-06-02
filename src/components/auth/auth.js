@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import {
     Container, Col, Form,
-    FormGroup, Label, Input,
-    Button, UncontrolledAlert,
+    FormGroup, Input,
+    Button,
 } from 'reactstrap';
 import { withApiService } from '../hoc';
 import {withRouter} from "react-router-dom";
-import Cookies from 'js-cookie';
 import Alert from "reactstrap/es/Alert";
 
 

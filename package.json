@@ -3,20 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.17",
-    "@fortawesome/free-solid-svg-icons": "^5.8.1",
-    "@fortawesome/react-fontawesome": "^0.1.4",
-    "add": "^2.0.6",
-    "js-cookie": "^2.2.0",
-    "node-sass": "^4.11.0",
-    "prop-types": "^15.6.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-router-dom": "^5.0.0",
-    "react-scripts": "2.1.8",
-    "reactstrap": "^8.0.0",
-    "webtorrent": "latest",
-    "yarn": "^1.15.2"
+    "@fortawesome/fontawesome-svg-core": "latest",
+    "@fortawesome/free-solid-svg-icons": "latest",
+    "@fortawesome/react-fontawesome": "latest",
+    "add": "latest",
+    "js-cookie": "latest",
+    "node-sass": "latest",
+    "prop-types": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-router-dom": "latest",
+    "react-scripts": "latest",
+    "reactstrap": "latest"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -32,5 +30,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@types/reactstrap": "^8.0.1"
+  }
 }
