@@ -49,7 +49,7 @@ class Paginator extends Component {
         const { currentPage, pageCount } = this.state;
         const page = parseInt(currentPage);
         const count = parseInt(pageCount);
-        const isCurrent0 = page == 1 ? 1 : page - 1;
+        const isCurrent0 = page === 1 ? 1 : page - 1;
         const isCurrent1 = page >= count ? count : page + 1;
         const isCurrent2 = page + 1 >= count ? count : page + 2;
          return (
